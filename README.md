@@ -12,11 +12,9 @@ To run:
 bun run dev
 ```
 
-open http://localhost:3000
-
 ## API Documentation
 
-- Local: http://localhost:3000 (common default)
+- Local: http://localhost:3000
 - Production (choose one): https://toybox.radityaabi.com
 
 | Endpoint       | HTTP     | Description       |
