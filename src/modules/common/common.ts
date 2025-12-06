@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { toysData } from "./data";
+import { toysData } from "../toy/data";
 
 export const commonRoute = new Hono();
 

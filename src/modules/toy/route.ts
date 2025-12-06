@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { toysData } from "../common/data";
+import { toysData } from "./data";
 
 export const toyRoute = new Hono();
 
