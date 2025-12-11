@@ -17,12 +17,12 @@ bun run dev
 - Local: http://localhost:3000
 - Production : https://toybox.radityaabi.com
 
-| Endpoint       | HTTP     | Description       |
-| -------------- | -------- | ----------------- |
-| `/toys`        | `GET`    | Get all items     |
-| `/toys/{slug}` | `GET`    | Get item by slug  |
-| `/toys`        | `POST`   | Add new item      |
-| `/toys`        | `DELETE` | Delete all items  |
-| `/toys/{id}`   | `DELETE` | Delete item by id |
-| `/toys/{id}`   | `PATCH`  | Patch item by id  |
-| `/toys/{id}`   | `PUT`    | Update item by id |
+| Endpoint       | HTTP     | Description      |
+| -------------- | -------- | ---------------- |
+| `/toys`        | `GET`    | Get all toys     |
+| `/toys/{slug}` | `GET`    | Get toy by slug  |
+| `/toys`        | `POST`   | Add new toy      |
+| `/toys`        | `DELETE` | Delete all toys  |
+| `/toys/{id}`   | `DELETE` | Delete toy by id |
+| `/toys/{id}`   | `PATCH`  | Patch toy by id  |
+| `/toys/{id}`   | `PUT`    | Update toy by id |
