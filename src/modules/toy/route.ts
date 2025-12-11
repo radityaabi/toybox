@@ -75,7 +75,6 @@ toyRoute.get("/category/:categoryId", (c) => {
   } catch (error) {
     return c.json({ message: "Error retrieving toys by category" }, 500);
   }
-  ("T010");
 });
 
 // DELETE - Delete a toy by ID
@@ -99,7 +98,9 @@ toyRoute.post("/", zValidator("json", CreateToySchema), async (c) => {
 
     const newToy = {
       id: newId,
-      slug: String(slugify(toyJSON.name)),
+      slug: String(
+        slugify(toyJSON.name, { lower: true, strict: true, trim: true })
+      ),
       ...toyJSON,
       createdAt: new Date(),
       updatedAt: null,
