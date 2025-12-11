@@ -1,21 +1,43 @@
 import { Hono } from "hono";
-import { Toys } from "./data";
-import { Toy, ToySchema } from "./types/toy";
 import { zValidator } from "@hono/zod-validator";
 import { randomUUIDv7 } from "bun";
+import slugify from "slugify";
 
-const slugify = require("slugify");
+import { dataToys } from "./data";
+import {
+  CreateToy,
+  CreateToySchema,
+  Toy,
+  ToySchema,
+  UpdateToy,
+} from "./schema-type";
 
 export const toyRoute = new Hono();
 
-let dataToys = Toys;
+let toys = dataToys;
 
 // GET - Retrieve all toys
 toyRoute.get("/", (c) => {
-  return c.json(dataToys);
+  return c.json(toys);
 });
 
-// GET - Retrieve search toys by name query
+// GET - Retrieve a toy by slug
+toyRoute.get("/:slug", (c) => {
+  try {
+    const slug = c.req.param("slug");
+    const foundToy = toys.find((toy) => toy.slug === slug);
+
+    if (foundToy) {
+      return c.json(foundToy);
+    } else {
+      return c.json({ message: "Toy not found" }, 404);
+    }
+  } catch (error) {
+    return c.json({ message: "Error retrieving toy by slug" }, 500);
+  }
+});
+
+// GET - Search toys by name query
 toyRoute.get("/search", (c) => {
   try {
     const query = c.req.query("q")?.toLowerCase() || "";
@@ -23,7 +45,7 @@ toyRoute.get("/search", (c) => {
       return c.json({ message: "Query parameter 'q' is required" }, 400);
     }
 
-    const searchResults = dataToys.filter((toy) =>
+    const searchResults = toys.filter((toy) =>
       toy.name.toLowerCase().includes(query)
     );
 
@@ -41,9 +63,7 @@ toyRoute.get("/search", (c) => {
 toyRoute.get("/category/:categoryId", (c) => {
   try {
     const categoryId = parseInt(c.req.param("categoryId"));
-    const filteredToys = dataToys.filter(
-      (toy) => toy.categories?.id === categoryId
-    );
+    const filteredToys = toys.filter((toy) => toy.category?.id === categoryId);
 
     if (filteredToys.length === 0) {
       return c.json(
@@ -61,9 +81,9 @@ toyRoute.get("/category/:categoryId", (c) => {
 // DELETE - Delete a toy by ID
 toyRoute.delete("/:id", (c) => {
   try {
-    const id = c.req.param("id");
-    const updatedDataToys = dataToys.filter((toy) => toy.id !== id);
-    dataToys = updatedDataToys;
+    const id = parseInt(c.req.param("id"));
+    const updatedDataToys = toys.filter((toy) => toy.id !== id);
+    toys = updatedDataToys;
     return c.json({ message: "Toy deleted successfully" });
   } catch (error) {
     return c.json({ message: "Error deleting toy" }, 500);
@@ -71,20 +91,20 @@ toyRoute.delete("/:id", (c) => {
 });
 
 // POST - Create a new toy
-toyRoute.post("/", zValidator("json", ToySchema), async (c) => {
+toyRoute.post("/", zValidator("json", CreateToySchema), async (c) => {
   try {
-    const toyJSON: Toy = await c.req.json();
+    const toyJSON: CreateToy = await c.req.json();
 
     const newToy = {
-      id: randomUUIDv7(),
+      id: Math.random(), // FIX THIS
       slug: String(slugify(toyJSON.name)),
       ...toyJSON,
       created_at: new Date(),
       updated_at: null,
     };
 
-    const updatedDataToys = [...dataToys, newToy];
-    dataToys = updatedDataToys;
+    const updatedDataToys = [...toys, newToy];
+    toys = updatedDataToys;
 
     return c.json({ message: "Added new toy data", data: newToy }, 201);
   } catch (error) {
@@ -95,9 +115,9 @@ toyRoute.post("/", zValidator("json", ToySchema), async (c) => {
 // PATCH - Update a toy by ID
 toyRoute.patch("/:id", zValidator("json", ToySchema), async (c) => {
   try {
-    const id = c.req.param("id");
+    const id = parseInt(c.req.param("id"));
     const toyJSON: Toy = await c.req.json();
-    const foundToyData = dataToys.find((toy) => toy.id === id);
+    const foundToyData = toys.find((toy) => toy.id === id);
 
     if (!foundToyData) {
       return c.json({ message: "Toy not found" }, 404);
@@ -109,10 +129,10 @@ toyRoute.patch("/:id", zValidator("json", ToySchema), async (c) => {
       updated_at: new Date(),
     };
 
-    const updatedDataToys = dataToys.map((toy) =>
+    const updatedDataToys = toys.map((toy) =>
       toy.id === id ? updatedToy : toy
     );
-    dataToys = updatedDataToys;
+    toys = updatedDataToys;
 
     return c.json({ message: "Toy data updated", data: updatedToy });
   } catch (error) {
@@ -123,9 +143,9 @@ toyRoute.patch("/:id", zValidator("json", ToySchema), async (c) => {
 // PUT - Replace a toy by ID
 toyRoute.put("/:id", zValidator("json", ToySchema), async (c) => {
   try {
-    const id = c.req.param("id");
-    const toyJSON: Toy = await c.req.json();
-    const foundToyData = dataToys.find((toy) => toy.id === id);
+    const id = parseInt(c.req.param("id"));
+    const toyJSON: UpdateToy = await c.req.json();
+    const foundToyData = toys.find((toy) => toy.id === id);
 
     if (!foundToyData) {
       const newToy = {
@@ -135,8 +155,8 @@ toyRoute.put("/:id", zValidator("json", ToySchema), async (c) => {
         updated_at: null,
       };
 
-      const updatedDataToys = [...dataToys, newToy];
-      dataToys = updatedDataToys;
+      const updatedDataToys = [...toys, newToy];
+      toys = updatedDataToys;
 
       return c.json(
         { message: "Toy not found. Created new toy.", data: newToy },
@@ -147,33 +167,17 @@ toyRoute.put("/:id", zValidator("json", ToySchema), async (c) => {
     const replacedToy = {
       id: id,
       ...toyJSON,
-      created_at: foundToyData.created_at,
-      updated_at: new Date(),
+      createdAt: foundToyData.createdAt,
+      updatedAt: new Date(),
     };
 
-    const updatedDataToys = dataToys.map((toy) =>
+    const updatedDataToys = toys.map((toy) =>
       toy.id === id ? replacedToy : toy
     );
-    dataToys = updatedDataToys;
+    toys = updatedDataToys;
 
     return c.json({ message: "Toy data replaced", data: replacedToy });
   } catch (error) {
     return c.json({ message: "Error replacing toy data" }, 500);
-  }
-});
-
-// GET - Retrieve a toy by slug
-toyRoute.get("/:slug", (c) => {
-  try {
-    const slug = c.req.param("slug");
-    const foundToy = dataToys.find((toy) => toy.slug === slug);
-
-    if (foundToy) {
-      return c.json(foundToy);
-    } else {
-      return c.json({ message: "Toy not found" }, 404);
-    }
-  } catch (error) {
-    return c.json({ message: "Error retrieving toy by slug" }, 500);
   }
 });
