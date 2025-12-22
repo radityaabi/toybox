@@ -6,6 +6,7 @@ import { dataToys } from "./data";
 import {
   CreateToy,
   CreateToySchema,
+  ReplaceToy,
   ReplaceToySchema,
   Toy,
   ToySchema,
@@ -121,7 +122,7 @@ toyRoute.post("/", zValidator("json", CreateToySchema), async (c) => {
 toyRoute.patch("/:id", zValidator("json", UpdateToySchema), async (c) => {
   try {
     const id = Number(c.req.param("id"));
-    const toyJSON = c.req.valid("json");
+    const toyJSON: UpdateToy = c.req.valid("json");
 
     const foundToy = toys.find((toy) => toy.id === id);
     if (!foundToy) {
@@ -149,7 +150,7 @@ toyRoute.patch("/:id", zValidator("json", UpdateToySchema), async (c) => {
 toyRoute.put("/:id", zValidator("json", ReplaceToySchema), async (c) => {
   try {
     const id = Number(c.req.param("id"));
-    const toyJSON = c.req.valid("json");
+    const toyJSON: ReplaceToy = c.req.valid("json");
 
     const foundToy = toys.find((toy) => toy.id === id);
 
