@@ -23,22 +23,6 @@ toyRoute.get("/", (c) => {
   return c.json(toys);
 });
 
-// GET - Retrieve a toy by slug
-toyRoute.get("/:slug", (c) => {
-  try {
-    const slug = c.req.param("slug");
-    const foundToy = toys.find((toy) => toy.slug === slug);
-
-    if (foundToy) {
-      return c.json(foundToy);
-    } else {
-      return c.json({ message: "Toy not found" }, 404);
-    }
-  } catch (error) {
-    return c.json({ message: "Error retrieving toy by slug" }, 500);
-  }
-});
-
 // GET - Search toys by name query
 toyRoute.get("/search", (c) => {
   try {
@@ -58,6 +42,22 @@ toyRoute.get("/search", (c) => {
     return c.json(searchResults);
   } catch (error) {
     return c.json({ message: "Error searching toys" }, 500);
+  }
+});
+
+// GET - Retrieve a toy by slug
+toyRoute.get("/:slug", (c) => {
+  try {
+    const slug = c.req.param("slug");
+    const foundToy = toys.find((toy) => toy.slug === slug);
+
+    if (foundToy) {
+      return c.json(foundToy);
+    } else {
+      return c.json({ message: "Toy not found" }, 404);
+    }
+  } catch (error) {
+    return c.json({ message: "Error retrieving toy by slug" }, 500);
   }
 });
 
