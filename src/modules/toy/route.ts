@@ -65,7 +65,7 @@ toyRoute.get("/:slug", (c) => {
 // DELETE - Delete a toy by ID
 toyRoute.delete("/:id", (c) => {
   try {
-    const id = c.req.param("id");
+    const id = Number(c.req.param("id"));
     const updatedDataToys = toys.filter((toy) => toy.id !== id);
     toys = updatedDataToys;
     return c.json({ message: "Toy deleted successfully" });
@@ -78,7 +78,7 @@ toyRoute.delete("/:id", (c) => {
 toyRoute.post("/", zValidator("json", CreateToySchema), async (c) => {
   try {
     const toyJSON: CreateToy = await c.req.json();
-    const newId = randomUUIDv7();
+    const newId = toys.length > 0 ? toys[toys.length - 1].id + 1 : 1;
 
     const newToy = {
       id: newId,
@@ -102,7 +102,7 @@ toyRoute.post("/", zValidator("json", CreateToySchema), async (c) => {
 // PATCH - Update a toy by ID
 toyRoute.patch("/:id", zValidator("json", UpdateToySchema), async (c) => {
   try {
-    const id = c.req.param("id");
+    const id = Number(c.req.param("id"));
     const toyJSON: UpdateToy = c.req.valid("json");
 
     const foundToy = toys.find((toy) => toy.id === id);
@@ -116,7 +116,7 @@ toyRoute.patch("/:id", zValidator("json", UpdateToySchema), async (c) => {
       updatedAt: new Date(),
     };
 
-    toys = toys.map((toy) => (toy.id === String(id) ? updatedToy : toy));
+    toys = toys.map((toy) => (toy.id === id ? updatedToy : toy));
 
     return c.json({
       success: true,
@@ -130,7 +130,7 @@ toyRoute.patch("/:id", zValidator("json", UpdateToySchema), async (c) => {
 // PUT - Replace a toy by ID
 toyRoute.put("/:id", zValidator("json", ReplaceToySchema), async (c) => {
   try {
-    const id = c.req.param("id");
+    const id = Number(c.req.param("id"));
     const toyJSON: ReplaceToy = c.req.valid("json");
 
     const foundToy = toys.find((toy) => toy.id === id);

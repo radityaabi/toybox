@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 export const ToySchema = z.object({
-  id: z.string(),
+  id: z.number(),
   sku: z.string().min(3),
   name: z.string().min(3),
   slug: z.string().min(3).optional(),
   category: z
     .object({
-      id: z.string(),
+      id: z.number(),
       name: z.string().min(3),
       slug: z.string().min(3).optional(),
     })

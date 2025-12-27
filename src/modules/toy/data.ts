@@ -4,12 +4,12 @@ type Toys = Toy[];
 
 export const dataToys: Toys = [
   {
-    id: "019b467d-e6e6-7c54-8af9-80c13bb32c3d",
+    id: 1,
     sku: "T001",
     name: "Rocket Shooter",
     slug: "rocket-shooter",
     category: {
-      id: "019b467f-eea4-7c97-9988-219e0b574ada",
+      id: 1,
       name: "Outdoor Toys",
       slug: "outdoor-toys",
     },
@@ -22,12 +22,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b467e-1f4c-7d3a-9f4e-5c9e8f4b6a2b",
+    id: 2,
     sku: "T002",
     name: "Building Blocks Set",
     slug: "building-blocks-set",
     category: {
-      id: "019b4680-5777-77a4-b395-f5bda9061cdf",
+      id: 2,
       name: "Educational Toys",
       slug: "educational-toys",
     },
@@ -40,12 +40,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4681-6631-76e7-a8fd-5f402cbef215",
+    id: 3,
     sku: "T003",
     name: "Remote Control Car",
     slug: "remote-control-car",
     category: {
-      id: "019b4680-80f8-73c8-8453-dbb8a1b7c60c",
+      id: 3,
       name: "Electronic Toys",
       slug: "electronic-toys",
     },
@@ -58,12 +58,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4681-9166-78fa-b928-e403d4109090",
+    id: 4,
     sku: "T004",
     name: "Doctor Playset",
     slug: "doctor-playset",
     category: {
-      id: "019b4680-baf2-785e-a688-5214d3a0ad70",
+      id: 4,
       name: "Role Play",
       slug: "role-play",
     },
@@ -76,12 +76,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4681-afcf-7758-a9d6-a6a9a42d3214",
+    id: 5,
     sku: "T005",
     name: "Water Gun",
     slug: "water-gun",
     category: {
-      id: "019b467f-eea4-7c97-9988-219e0b574ada",
+      id: 1,
       name: "Outdoor Toys",
       slug: "outdoor-toys",
     },
@@ -95,12 +95,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4681-d41a-7af5-bb38-44eca0de782a",
+    id: 6,
     sku: "T006",
     name: "Magnetic Drawing Board",
     slug: "magnetic-drawing-board",
     category: {
-      id: "019b4680-5777-77a4-b395-f5bda9061cdf",
+      id: 2,
       name: "Educational Toys",
       slug: "educational-toys",
     },
@@ -114,12 +114,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4681-f085-71a4-a4a6-bf916359d19f",
+    id: 7,
     sku: "T007",
     name: "Robot Dinosaur",
     slug: "robot-dinosaur",
     category: {
-      id: "019b4680-80f8-73c8-8453-dbb8a1b7c60c",
+      id: 3,
       name: "Electronic Toys",
       slug: "electronic-toys",
     },
@@ -134,12 +134,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4682-1240-713a-94b4-2005feff0e4f",
+    id: 8,
     sku: "T008",
     name: "Kitchen Set",
     slug: "kitchen-set",
     category: {
-      id: "019b4680-baf2-785e-a688-5214d3a0ad70",
+      id: 4,
       name: "Role Play",
       slug: "role-play",
     },
@@ -153,12 +153,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4682-314d-72f4-bcc1-741868f39130",
+    id: 9,
     sku: "T009",
     name: "Flying Disc",
     slug: "flying-disc",
     category: {
-      id: "019b467f-eea4-7c97-9988-219e0b574ada",
+      id: 1,
       name: "Outdoor Toys",
       slug: "outdoor-toys",
     },
@@ -172,12 +172,12 @@ export const dataToys: Toys = [
     updatedAt: null,
   },
   {
-    id: "019b4682-7399-7aab-9f7b-2f073326dba2",
+    id: 10,
     sku: "T010",
     name: "Alphabet Puzzle",
     slug: "alphabet-puzzle",
     category: {
-      id: "019b4680-5777-77a4-b395-f5bda9061cdf",
+      id: 2,
       name: "Educational Toys",
       slug: "educational-toys",
     },
