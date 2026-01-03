@@ -33,6 +33,8 @@ export const ToySchema = z.object({
   updatedAt: z.date().optional().nullable(),
 });
 
+export const SearchResultSchema = z.array(ToySchema);
+
 export const CreateToySchema = ToySchema.pick({
   sku: true,
   name: true,

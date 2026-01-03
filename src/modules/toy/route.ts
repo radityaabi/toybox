@@ -15,6 +15,7 @@ import {
   UpdateToy,
   UpdateToySchema,
   ParamIdSchema,
+  SearchResultSchema,
 } from "./schema-type";
 
 export const toyRoute = new OpenAPIHono();
@@ -52,7 +53,7 @@ toyRoute.openapi(
         description: "Successfully retrieved search results",
         content: {
           "application/json": {
-            schema: z.array(ToySchema),
+            schema: SearchResultSchema,
           },
         },
       },
