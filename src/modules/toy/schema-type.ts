@@ -81,7 +81,9 @@ export const GetToyParamsSchema = z.object({
 
 export const ErrorSchema = z.object({
   message: z.string().openapi({ example: "Not Found" }),
-  code: z.number().openapi({ example: 404 }),
+  code: z
+    .enum(["TOYS_SEARCH_NOT_FOUND", "TOYS_CREATE_ERROR"])
+    .openapi({ example: "EXAMPLE_ERROR_CODE" }),
 });
 
 export type Toy = z.infer<typeof ToySchema>;

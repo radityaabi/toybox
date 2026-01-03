@@ -1,0 +1,17 @@
+services:
+  backend:
+    image: toybox
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: .env
+        required: true
+  database:
+    image: postgres:alpine
+    ports:
+      - "5433:5432"
+    env_file:
+      - path: .env
+        required: true

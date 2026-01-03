@@ -88,7 +88,7 @@ toyRoute.openapi(
       return c.json(
         {
           message: "No toys found matching the query",
-          code: 404,
+          code: "TOYS_SEARCH_NOT_FOUND" as const,
         },
         404
       );
@@ -224,7 +224,7 @@ toyRoute.openapi(
       return c.json(
         {
           message: "Error searching toys",
-          code: 500,
+          code: "TOYS_CREATE_ERROR" as const,
         },
         500
       );
@@ -251,27 +251,15 @@ toyRoute.openapi(
     responses: {
       200: {
         description: "Successfully updated the toy",
-        content: {
-          "application/json": {
-            schema: ToySchema,
-          },
-        },
+        content: { "application/json": { schema: ToySchema } },
       },
       404: {
         description: "Toy not found",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
+        content: { "application/json": { schema: ErrorSchema } },
       },
       500: {
         description: "Error updating toy",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
+        content: { "application/json": { schema: ErrorSchema } },
       },
     },
   },
