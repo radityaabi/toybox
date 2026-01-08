@@ -38,11 +38,20 @@ categoryRoute.openapi(
       if (foundCategory.length > 0) {
         return c.json(foundCategory, 200);
       } else {
-        return c.json({ message: "Category not found", code: 404 }, 404);
+        return c.json(
+          {
+            message: "Category not found",
+            code: "TOYBOX_GET_ERROR" as const,
+          },
+          404
+        );
       }
     } catch (error) {
       return c.json(
-        { message: "Error retrieving category by slug", code: 500 },
+        {
+          message: "Error retrieving category by slug",
+          code: "TOYBOX_GET_ERROR" as const,
+        },
         500
       );
     }

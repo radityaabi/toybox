@@ -1,5 +1,6 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi";
 import slugify from "slugify";
+import * as pg from "pg";
 
 import { dataToys } from "./data";
 import {
@@ -27,11 +28,72 @@ toyRoute.openapi(
   {
     method: "get",
     path: "/",
-    description: "Retrieve a list of all toys",
-    responses: { 200: { description: "Successfully retrieved list of toys" } },
+    description: "Retrieve a list of all toys with category details",
+    responses: {
+      200: { description: "Successfully retrieved list of toys" },
+    },
   },
-  (c) => {
-    return c.json(toys);
+  async (c) => {
+    const client = new pg.Client({
+      connectionString: process.env.DATABASE_URL,
+    });
+
+    await client.connect();
+
+    try {
+      const query = `
+        SELECT
+          t.id,
+          t.sku,
+          t.name,
+          t.slug,
+          t.brand,
+          t.price,
+          t.age_range,
+          t.image_url,
+          t.description,
+          t.created_at,
+          t.updated_at,
+          c.id   AS category_id,
+          c.name AS category_name,
+          c.slug AS category_slug
+        FROM toys t
+        JOIN categories c ON t.category_id = c.id
+      `;
+
+      const result = await client.query(query);
+
+      const toys = result.rows.map((row) => ({
+        id: row.id,
+        sku: row.sku,
+        name: row.name,
+        slug: row.slug,
+        brand: row.brand,
+        price: row.price,
+        ageRange: row.age_range,
+        imageUrl: row.image_url,
+        description: row.description,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+        category: {
+          id: row.category_id,
+          name: row.category_name,
+          slug: row.category_slug,
+        },
+      }));
+
+      return c.json(toys);
+    } catch (error) {
+      return c.json(
+        {
+          message: "Error retrieving toys",
+          code: "TOYBOX_GET_ERROR",
+        },
+        500
+      );
+    } finally {
+      await client.end();
+    }
   }
 );
 

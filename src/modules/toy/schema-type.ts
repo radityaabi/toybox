@@ -4,19 +4,18 @@ export const SlugSchema = z.string().min(3);
 export const SearchQuerySchema = z.object({
   q: z.string().min(1),
 });
+export const CategorySchema = z.object({
+  id: z.number().openapi({ example: 1 }),
+  name: z.string().min(3).openapi({ example: "Action Figure" }),
+  slug: SlugSchema.openapi({ example: "action-figure" }).optional(),
+});
 
 export const ToySchema = z.object({
   id: z.number().openapi({ example: 1 }),
   sku: z.string().min(3).openapi({ example: "TOY-001" }),
   name: z.string().min(3).openapi({ example: "Action Figure" }),
   slug: SlugSchema.openapi({ example: "action-figure" }).optional(),
-  category: z
-    .object({
-      id: z.number().openapi({ example: 1 }),
-      name: z.string().min(3).openapi({ example: "Action Figure" }),
-      slug: z.string().min(3).optional().openapi({ example: "action-figure" }),
-    })
-    .optional(),
+  category: CategorySchema.optional(),
   brand: z.string().min(2).openapi({ example: "ToyBrand" }).optional(),
   price: z.number().min(100).openapi({ example: 19000 }).optional(),
   ageRange: z.string().min(1).openapi({ example: "3-5 years" }).optional(),
@@ -83,6 +82,7 @@ export const ErrorSchema = z.object({
   message: z.string().openapi({ example: "Not Found" }),
   code: z
     .enum([
+      "TOYBOX_GET_ERROR",
       "TOYBOX_SEARCH_ERROR",
       "TOYBOX_DELETE_ERROR",
       "TOYBOX_ADD_ERROR",
