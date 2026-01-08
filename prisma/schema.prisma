@@ -30,7 +30,7 @@ model Toy {
   slug        String   @db.VarChar(100)
 
   category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  Int      @map("category_id")
+  categoryId  Int      @map("categoryId")
 
   brand       String?  @db.VarChar(20)
   price       Int
