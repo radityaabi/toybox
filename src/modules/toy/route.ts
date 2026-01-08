@@ -54,13 +54,13 @@ toyRoute.openapi(
     },
   },
   async (c) => {
-    const client = new pg.Client({
-      connectionString: process.env.DATABASE_URL,
-    });
-
-    await client.connect();
-
     try {
+      const client = new pg.Client({
+        connectionString: process.env.DATABASE_URL,
+      });
+
+      await client.connect();
+
       const query = GET_TOYS_QUERY;
 
       const result = await client.query(query);
@@ -84,17 +84,17 @@ toyRoute.openapi(
         updatedAt: row.updated_at,
       }));
 
+      await client.end();
       return c.json(toys);
     } catch (error) {
       return c.json(
         {
           message: "Error retrieving toys",
           code: "TOYBOX_GET_ERROR",
+          error: error,
         },
         500
       );
-    } finally {
-      await client.end();
     }
   }
 );
