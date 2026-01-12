@@ -275,7 +275,7 @@ toyRoute.openapi(
         );
       }
 
-      // Check for existing toy with the same slug
+      // Check for existing toy with the same slug or sku
       const newSlug = slugify(payload.name, {
         lower: true,
         strict: true,
@@ -295,7 +295,7 @@ toyRoute.openapi(
         );
       }
 
-      //Create new SKU
+      //Create new toy data
       const createdToy: Toy = await prisma.toy.create({
         data: {
           sku: payload.sku,

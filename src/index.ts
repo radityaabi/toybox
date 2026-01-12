@@ -8,7 +8,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 const app = new OpenAPIHono();
 
 app.use(logger());
-app.use(cors());
+app.use("/toys", cors());
 
 app.route("/toys", toyRoute);
 app.route("/categories", categoryRoute);
