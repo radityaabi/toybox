@@ -5,7 +5,6 @@ async function main() {
   console.log("🌱 Seeding database...");
 
   // 1️⃣ Seed Categories
-  await prisma.category.deleteMany();
   const resultCategories = await prisma.category.createManyAndReturn({
     data: categories,
     select: { id: true, slug: true },
@@ -14,7 +13,6 @@ async function main() {
   console.log(`✅ Seeded ${resultCategories.length} categories.`);
 
   // 2️⃣ Seed Toys
-  await prisma.toy.deleteMany();
   const toysWithCategoryId = toys.map((toy) => {
     const category = resultCategories.find(
       (category) => category.slug === toy.categorySlug
