@@ -17,11 +17,9 @@ import {
   ParamIdSchema,
 } from "../../types/schema-type";
 import { responseSelect } from "../../lib/prisma-select";
+import { errorMessage } from "../../utils/error";
 
 export const toyRoute = new OpenAPIHono();
-
-const errorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : String(error);
 
 // GET - Retrieve all toys
 toyRoute.openapi(
