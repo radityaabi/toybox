@@ -3,12 +3,12 @@ export const responseSelect = {
   sku: true,
   name: true,
   slug: true,
-  category: true,
   brand: true,
   price: true,
   ageRange: true,
   imageUrl: true,
   description: true,
+  category: true,
   createdAt: true,
   updatedAt: true,
 };

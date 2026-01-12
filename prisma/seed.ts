@@ -9,7 +9,6 @@ async function main() {
     data: categories,
     select: { id: true, slug: true },
   });
-  console.log(`${resultCategories}`);
   console.log(`✅ Seeded ${resultCategories.length} categories.`);
 
   // 2️⃣ Seed Toys

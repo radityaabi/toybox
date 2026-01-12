@@ -24,22 +24,22 @@ model Category {
 }
 
 model Toy {
-  id          Int      @id @default(autoincrement())
-  sku         String   @unique @db.VarChar(20)
-  name        String   @db.Text
-  slug        String   @unique @db.VarChar(100)
+  id   Int    @id @default(autoincrement())
+  sku  String @unique @db.VarChar(20)
+  name String @db.Text
+  slug String @unique @db.VarChar(100)
 
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId  Int      @map("categoryId")
-
-  brand       String?  @db.VarChar(20)
+  brand       String? @db.VarChar(20)
   price       Int
-  ageRange    String?  @db.VarChar(20)
-  imageUrl    String?  @db.Text
-  description String?  @db.Text
+  ageRange    String? @db.VarChar(20)
+  imageUrl    String? @db.Text
+  description String? @db.Text
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime? @default(now()) @updatedAt
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int      @map("categoryId")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
 
   @@map("toys")
 }
