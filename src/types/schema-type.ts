@@ -60,8 +60,14 @@ export const ToyResponseSchema = ToyBaseSchema.extend({
 export const SearchResultSchema = z.array(ToyResponseSchema);
 
 export const CreateToySchema = ToyBaseSchema; // POST
-export const UpdateToySchema = ToyBaseSchema.partial(); // PATCH
-export const ReplaceToySchema = ToyBaseSchema; // PUT (same as create)
+export const UpdateToySchema = ToyBaseSchema.omit({ price: true })
+  .extend({
+    price: z.number().min(100).optional(),
+  })
+  .partial(); // PATCH
+export const ReplaceToySchema = ToyBaseSchema.omit({ price: true }).extend({
+  price: z.number().min(100).optional(),
+}); // PUT (same as create)
 
 export const ErrorSchema = z.object({
   message: z.string().openapi({ example: "Not Found" }),
