@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "categories" (
     "id" SERIAL NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
+    "name" TEXT NOT NULL,
     "slug" VARCHAR(50) NOT NULL,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
@@ -26,7 +26,13 @@ CREATE TABLE "toys" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "categories_slug_key" ON "categories"("slug");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "toys_sku_key" ON "toys"("sku");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "toys_slug_key" ON "toys"("slug");
 
 -- AddForeignKey
 ALTER TABLE "toys" ADD CONSTRAINT "toys_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
