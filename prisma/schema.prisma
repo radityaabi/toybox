@@ -15,8 +15,8 @@ datasource db {
 
 model Category {
   id   Int    @id @default(autoincrement())
-  name String @db.Text
-  slug String @unique @db.VarChar(50)
+  name String @db.VarChar(100)
+  slug String @unique @db.VarChar(100)
 
   toys Toy[]
 
@@ -26,7 +26,7 @@ model Category {
 model Toy {
   id   Int    @id @default(autoincrement())
   sku  String @unique @db.VarChar(20)
-  name String @db.Text
+  name String @db.VarChar(100)
   slug String @unique @db.VarChar(100)
 
   brand       String? @db.VarChar(20)

@@ -1,16 +1,10 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "../../lib/prisma";
-import {
-  CategorySchema,
-  CreateCategorySchema,
-  CreateCategory,
-  ErrorSchema,
-  GetParamsSchema,
-  ToyResponseSchema,
-} from "../../types/schema-type";
-import slugify from "slugify";
-import { responseSelect } from "../../lib/prisma-select";
+import { CategorySchema, CreateCategorySchema, CreateCategory } from "./schema";
+import { getErrorSchema, GetParamsSchema } from "../common/schema";
+import { createSlug } from "../common/utils";
 import { errorMessage } from "../../utils/error";
+import { ToyResponseSchema } from "../toy/schema";
 
 export const categoryRoute = new OpenAPIHono();
 
@@ -30,17 +24,17 @@ categoryRoute.openapi(
       },
       404: {
         description: "Category not found",
-        content: { "application/json": { schema: ErrorSchema } },
+        content: { "application/json": { schema: getErrorSchema } },
       },
       500: {
         description: "Error retrieving category",
-        content: { "application/json": { schema: ErrorSchema } },
+        content: { "application/json": { schema: getErrorSchema } },
       },
     },
   },
   async (c) => {
     try {
-      const slug = c.req.param("slug");
+      const { slug } = c.req.valid("param");
 
       // Check if category exists
       const category = await prisma.category.findFirst({
@@ -66,7 +60,6 @@ categoryRoute.openapi(
             slug: slug,
           },
         },
-        select: responseSelect,
         orderBy: {
           id: "asc",
         },
@@ -104,27 +97,30 @@ categoryRoute.openapi(
       },
       400: {
         description: "Bad request",
-        content: { "application/json": { schema: ErrorSchema } },
+        content: { "application/json": { schema: getErrorSchema } },
       },
       500: {
-        content: { "application/json": { schema: ErrorSchema } },
+        content: { "application/json": { schema: getErrorSchema } },
         description: "Returns an error",
       },
     },
   },
   async (c) => {
     try {
-      const payload: CreateCategory = c.req.valid("json");
+      const payload = c.req.valid("json");
 
-      const categorySlug = slugify(payload.name, { strict: true, lower: true });
+      const categorySlug = createSlug(payload.name);
 
-      const checkExistingCategory = await prisma.category.findFirst({
-        where: {
-          slug: categorySlug,
-        },
-      });
+      try {
+        const newCategory = await prisma.category.create({
+          data: {
+            name: payload.name,
+            slug: categorySlug,
+          },
+        });
 
-      if (checkExistingCategory) {
+        return c.json(newCategory, 201);
+      } catch (error) {
         return c.json(
           {
             message: "Category already exists",
@@ -133,15 +129,6 @@ categoryRoute.openapi(
           400,
         );
       }
-
-      const newCategory = await prisma.category.create({
-        data: {
-          name: payload.name,
-          slug: categorySlug,
-        },
-      });
-
-      return c.json(newCategory, 201);
     } catch (error) {
       console.error("Error creating category:", error);
       return c.json(
