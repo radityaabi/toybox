@@ -47,10 +47,10 @@ toyRoute.openapi(
           code: "GET_ERROR",
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // GET - Search toys by name query
@@ -92,7 +92,7 @@ toyRoute.openapi(
             message: "Invalid query parameter",
             code: "INVALID_QUERY" as const,
           },
-          400
+          400,
         );
       }
 
@@ -115,7 +115,7 @@ toyRoute.openapi(
             message: "No toys found matching the query",
             code: "SEARCH_ERROR" as const,
           },
-          404
+          404,
         );
       }
 
@@ -127,10 +127,10 @@ toyRoute.openapi(
           code: "SEARCH_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // GET - Retrieve a toy by slug
@@ -166,7 +166,7 @@ toyRoute.openapi(
         select: responseSelect,
       });
 
-      if (!result) {
+      if (result.length === 0) {
         return c.json({ message: "Toy not found" }, 404);
       }
 
@@ -174,7 +174,7 @@ toyRoute.openapi(
     } catch (error) {
       return c.json({ message: "Error retrieving toy by slug" }, 500);
     }
-  }
+  },
 );
 
 // DELETE - Delete a toy by ID
@@ -220,10 +220,10 @@ toyRoute.openapi(
     } catch (error) {
       return c.json(
         { message: "Error deleting toy", code: "DELETE_ERROR" as const },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // POST - Create a new toy
@@ -269,7 +269,7 @@ toyRoute.openapi(
             message: "Category not found",
             code: "CATEGORY_NOT_FOUND" as const,
           },
-          404
+          404,
         );
       }
 
@@ -289,7 +289,7 @@ toyRoute.openapi(
             message: "Toy with the same slug or sku already exists",
             code: "TOY_EXISTS" as const,
           },
-          400
+          400,
         );
       }
 
@@ -316,10 +316,10 @@ toyRoute.openapi(
           code: "ADD_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // PATCH - Update a toy by ID
@@ -369,7 +369,7 @@ toyRoute.openapi(
       if (!foundToy) {
         return c.json(
           { message: "Toy not found", code: "TOY_NOT_FOUND" as const },
-          404
+          404,
         );
       }
 
@@ -392,10 +392,10 @@ toyRoute.openapi(
           code: "UPDATE_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // PUT - Replace a toy by ID
@@ -455,7 +455,7 @@ toyRoute.openapi(
               message: "Toy with the same slug or sku already exists",
               code: "TOY_EXISTS" as const,
             },
-            400
+            400,
           );
         }
 
@@ -492,8 +492,8 @@ toyRoute.openapi(
           message: "Error replacing toy",
           code: "REPLACE_ERROR" as const,
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
