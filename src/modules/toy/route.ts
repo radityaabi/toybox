@@ -209,7 +209,7 @@ toyRoute.openapi(
       });
 
       if (!result) {
-        return c.json({ message: "Toy not found", code: 404 }, 404);
+        return c.json({ message: "Toy not found", code: "TOY_NOT_FOUND" }, 404);
       }
 
       await prisma.toy.delete({
