@@ -38,6 +38,7 @@ toyRoute.openapi(
         orderBy: {
           id: "asc",
         },
+        include: { category: true },
       });
       return c.json(toys);
     } catch (error) {
@@ -101,6 +102,7 @@ toyRoute.openapi(
         orderBy: {
           id: "asc",
         },
+        include: { category: true },
       });
 
       return c.json(toys, 200);
@@ -144,6 +146,7 @@ toyRoute.openapi(
         where: {
           slug: slug,
         },
+        include: { category: true },
       });
 
       return c.json(toy);
@@ -268,6 +271,7 @@ toyRoute.openapi(
             imageUrl: payload.imageUrl,
             description: payload.description,
           },
+          include: { category: true },
         });
 
         return c.json(createdToy, 201);
@@ -283,7 +287,7 @@ toyRoute.openapi(
     } catch (error) {
       return c.json(
         {
-          message: "Error searching toys",
+          message: "Error adding toys",
           code: "ADD_ERROR" as const,
           error: errorMessage(error),
         },
@@ -350,6 +354,7 @@ toyRoute.openapi(
           ...payload,
           slug: payload.name ? createSlug(payload.name) : foundToy.slug,
         },
+        include: { category: true },
       });
 
       return c.json(updatedToy, 200);
@@ -437,6 +442,7 @@ toyRoute.openapi(
       const updatedToy = await prisma.toy.update({
         where: { id: id },
         data: payload,
+        include: { category: true },
       });
 
       return c.json(updatedToy, 200);

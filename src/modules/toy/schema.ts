@@ -45,8 +45,3 @@ export const UpdateToySchema = ToyBaseSchema.omit({ price: true })
 export const ReplaceToySchema = ToyBaseSchema.omit({ price: true }).extend({
   price: z.number().min(100).optional(),
 }); // PUT (same as create)
-
-export type Toy = z.infer<typeof ToyResponseSchema>;
-export type CreateToy = z.infer<typeof CreateToySchema>;
-export type UpdateToy = z.infer<typeof UpdateToySchema>;
-export type ReplaceToy = z.infer<typeof ReplaceToySchema>;
