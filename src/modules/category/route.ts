@@ -11,7 +11,7 @@ import {
 import slugify from "slugify";
 import { responseSelect } from "../../lib/prisma-select";
 import { getSystemErrorMessage } from "node:util";
-import { errorMessage } from "../../utils/error";
+import { getErrorMessage } from "../../utils/error";
 
 export const categoryRoute = new OpenAPIHono();
 
@@ -79,7 +79,7 @@ categoryRoute.openapi(
         {
           message: "Error retrieving category",
           code: "GET_ERROR" as const,
-          error: errorMessage(error),
+          error: getErrorMessage(error),
         },
         500
       );
@@ -149,7 +149,7 @@ categoryRoute.openapi(
         {
           message: "Error creating category",
           code: "CATEGORY_ADD_ERROR" as const,
-          error: errorMessage(error),
+          error: getErrorMessage(error),
         },
         500
       );

@@ -14,8 +14,9 @@ datasource db {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String @db.Text
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(50)
   slug String @unique @db.VarChar(50)
 
   toys Toy[]
@@ -24,7 +25,8 @@ model Category {
 }
 
 model Toy {
-  id   Int    @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   sku  String @unique @db.VarChar(20)
   name String @db.Text
   slug String @unique @db.VarChar(100)
@@ -38,8 +40,10 @@ model Toy {
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int      @map("categoryId")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("toys")
 }
+
+// TODO: model Brand

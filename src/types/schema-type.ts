@@ -3,7 +3,7 @@ import { z } from "@hono/zod-openapi";
 export const SlugSchema = z.string().min(3);
 
 export const ParamIdSchema = z.object({
-  id: z.coerce.number().positive(),
+  id: z.int().positive(),
 });
 
 export const GetParamsSchema = z.object({
@@ -26,7 +26,7 @@ export const CreateCategorySchema = CategorySchema.pick({
 
 const ToyBaseSchema = z.object({
   sku: z.string().min(3).openapi({ example: "SKU123" }),
-  name: z.string().min(3).openapi({ example: "Toy Name" }),
+  name: z.string().min(3).max(100).openapi({ example: "Toy Name" }),
   categoryId: z.number().openapi({ example: 1 }),
   brand: z.string().min(2).nullable().optional().openapi({ example: "Brand" }),
   price: z.number().min(100).default(100).openapi({ example: 100 }),
