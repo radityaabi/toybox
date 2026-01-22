@@ -219,7 +219,11 @@ toyRoute.openapi(
       return c.json({ message: "Toy deleted successfully" });
     } catch (error) {
       return c.json(
-        { message: "Error deleting toy", code: "DELETE_ERROR" as const },
+        {
+          message: "Error deleting toy",
+          code: "DELETE_ERROR" as const,
+          error: errorMessage(error),
+        },
         500,
       );
     }
@@ -491,6 +495,7 @@ toyRoute.openapi(
         {
           message: "Error replacing toy",
           code: "REPLACE_ERROR" as const,
+          error: errorMessage(error),
         },
         500,
       );
