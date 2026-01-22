@@ -153,6 +153,10 @@ toyRoute.openapi(
         include: { category: true },
       });
 
+      if (!toy) {
+        return c.json({ message: "Toy not found", code: "TOY_NOT_FOUND" }, 404);
+      }
+
       return c.json(toy);
     } catch (error) {
       return c.json({ message: "Error retrieving toy by slug" }, 500);
