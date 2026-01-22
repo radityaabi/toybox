@@ -18,6 +18,9 @@ model Category {
   name String @db.VarChar(100)
   slug String @unique @db.VarChar(100)
 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+
   toys Toy[]
 
   @@map("categories")
