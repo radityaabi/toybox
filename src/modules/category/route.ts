@@ -10,7 +10,6 @@ import {
 } from "../../types/schema-type";
 import slugify from "slugify";
 import { responseSelect } from "../../lib/prisma-select";
-import { getSystemErrorMessage } from "node:util";
 import { errorMessage } from "../../utils/error";
 
 export const categoryRoute = new OpenAPIHono();
@@ -56,7 +55,7 @@ categoryRoute.openapi(
             message: "Category not found",
             code: "CATEGORY_NOT_FOUND" as const,
           },
-          404
+          404,
         );
       }
 
@@ -81,10 +80,10 @@ categoryRoute.openapi(
           code: "GET_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // POST - Create a new category
@@ -131,7 +130,7 @@ categoryRoute.openapi(
             message: "Category already exists",
             code: "CATEGORY_EXISTS" as const,
           },
-          400
+          400,
         );
       }
 
@@ -151,8 +150,8 @@ categoryRoute.openapi(
           code: "CATEGORY_ADD_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
