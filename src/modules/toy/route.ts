@@ -17,6 +17,7 @@ import {
 import { errorMessage } from "../../utils/error";
 
 export const toyRoute = new OpenAPIHono();
+const tag = ["toys"];
 
 // GET - Retrieve all toys
 toyRoute.openapi(
@@ -24,6 +25,7 @@ toyRoute.openapi(
     method: "get",
     path: "/",
     description: "Retrieve a list of all toys with category details",
+    tags: tag,
     responses: {
       200: { description: "Successfully retrieved list of toys" },
       500: {
@@ -60,6 +62,7 @@ toyRoute.openapi(
     method: "get",
     path: "/search",
     description: "Search toys by name",
+    tags: tag,
     request: {
       query: SearchQuerySchema,
     },
@@ -124,10 +127,11 @@ toyRoute.openapi(
   {
     method: "get",
     path: "/{slug}",
+    description: "Retrieve a toy by its slug",
+    tags: tag,
     request: {
       params: GetParamsSchema,
     },
-    description: "Retrieve a toy by its slug",
     responses: {
       200: {
         description: "Successfully retrieved the toy",
@@ -161,10 +165,11 @@ toyRoute.openapi(
   {
     method: "delete",
     path: "/{id}",
+    description: "Delete a toy by ID",
+    tags: tag,
     request: {
       params: ParamIdSchema,
     },
-    description: "Delete a toy by ID",
     responses: {
       200: {
         description: "Successfully deleted the toy",
@@ -214,10 +219,11 @@ toyRoute.openapi(
   {
     method: "post",
     path: "/",
+    tags: tag,
+    description: "Create a new toy",
     request: {
       body: { content: { "application/json": { schema: CreateToySchema } } },
     },
-    description: "Create a new toy",
     responses: {
       201: {
         description: "Successfully created a new toy",
@@ -303,6 +309,7 @@ toyRoute.openapi(
     method: "patch",
     path: "/{id}",
     description: "Update a toy by ID",
+    tags: tag,
     request: {
       params: ParamIdSchema,
       body: {
@@ -377,6 +384,7 @@ toyRoute.openapi(
     method: "put",
     path: "/{id}",
     description: "Replace a toy by ID",
+    tags: tag,
     request: {
       params: ParamIdSchema,
       body: {

@@ -7,6 +7,7 @@ import { errorMessage } from "../../utils/error";
 import { ToyResponseSchema } from "../toy/schema";
 
 export const categoryRoute = new OpenAPIHono();
+const tag = ["categories"];
 
 // GET - Retrieve a toy by slug
 categoryRoute.openapi(
@@ -17,6 +18,7 @@ categoryRoute.openapi(
       params: GetParamsSchema,
     },
     description: "Retrieve toys by category",
+    tags: tag,
     responses: {
       200: {
         description: "Successfully retrieved the toys by category",
@@ -89,6 +91,7 @@ categoryRoute.openapi(
         content: { "application/json": { schema: CreateCategorySchema } },
       },
     },
+    tags: tag,
     description: "Create a new category",
     responses: {
       201: {
