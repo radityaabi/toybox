@@ -136,6 +136,45 @@ export const toys = [
     description:
       "A multi-level LEGO City Fire Station set featuring fire trucks, a helicopter, and firefighter minifigures.",
   },
+  {
+    sku: "L002",
+    name: "LEGO Star Wars X-Wing Starfighter",
+    slug: "lego-star-wars-x-wing-starfighter",
+    categorySlug: "building-sets",
+    brandSlug: "lego",
+    price: 1099000,
+    ageRange: "9-14",
+    imageUrl:
+      "https://www.lego.com/cdn/cs/set/assets/blt3b6c7a6f3b4a1e64/75301.png",
+    description:
+      "An iconic X-Wing Starfighter from Star Wars, complete with Luke Skywalker minifigure and opening wings.",
+  },
+  {
+    sku: "L003",
+    name: "LEGO Creator 3-in-1 Pirate Ship",
+    slug: "lego-creator-3-in-1-pirate-ship",
+    categorySlug: "building-sets",
+    brandSlug: "lego",
+    price: 1599000,
+    ageRange: "9-16",
+    imageUrl:
+      "https://www.lego.com/cdn/cs/set/assets/blt2c45d7a1b7a38c9f/31109.png",
+    description:
+      "A versatile 3-in-1 LEGO Creator set that can be rebuilt into a pirate ship, skull island, or pirate inn.",
+  },
+  {
+    sku: "L004",
+    name: "LEGO Technic Bugatti Bolide",
+    slug: "lego-technic-bugatti-bolide",
+    categorySlug: "vehicles",
+    brandSlug: "lego",
+    price: 749000,
+    ageRange: "9-16",
+    imageUrl:
+      "https://www.lego.com/cdn/cs/set/assets/blt5f1b7a92bfe91a2a/42151.png",
+    description:
+      "A detailed LEGO Technic model of the Bugatti Bolide, featuring realistic mechanics and sporty design.",
+  },
 ];
 
 export const categories = [
@@ -146,6 +185,8 @@ export const categories = [
   { name: "Vehicles & Remote Control", slug: "vehicles-remote-control" },
   { name: "Arts & Crafts", slug: "arts-crafts" },
   { name: "Statues", slug: "statues" },
+  { name: "Building Sets", slug: "building-sets" },
+  { name: "Vehicles", slug: "vehicles" },
 ];
 
 export const brands = [
@@ -188,5 +229,10 @@ export const brands = [
     name: "Bandai Namco",
     slug: "bandai-namco",
     logo: "https://example.com/logos/bandai-namco.png",
+  },
+  {
+    name: "LEGO",
+    slug: "lego",
+    logo: "https://example.com/logos/lego.png",
   },
 ];
