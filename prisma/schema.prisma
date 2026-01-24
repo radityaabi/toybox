@@ -47,8 +47,8 @@ model Toy {
   name String @db.VarChar(100)
   slug String @unique @db.VarChar(100)
 
-  categoryId Int      @map("categoryId")
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int?      @map("categoryId")
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   brandId    Int?   @map("brandId")
   brand      Brand? @relation(fields: [brandId], references: [id], onDelete: SetNull)

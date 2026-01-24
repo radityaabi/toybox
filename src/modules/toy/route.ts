@@ -252,18 +252,20 @@ toyRoute.openapi(
       const payload = c.req.valid("json");
 
       // Check if category exists
-      const findCategory = await prisma.category.findUnique({
-        where: { id: payload.categoryId },
-      });
+      if (payload.categoryId) {
+        const findCategory = await prisma.category.findUnique({
+          where: { id: payload.categoryId },
+        });
 
-      if (!findCategory) {
-        return c.json(
-          {
-            message: "Category not found",
-            code: "CATEGORY_NOT_FOUND" as const,
-          },
-          404,
-        );
+        if (!findCategory) {
+          return c.json(
+            {
+              message: "Category not found",
+              code: "CATEGORY_NOT_FOUND" as const,
+            },
+            404,
+          );
+        }
       }
 
       // Check if brand exists
@@ -291,8 +293,8 @@ toyRoute.openapi(
             sku: payload.sku,
             name: payload.name,
             slug: newSlug,
-            categoryId: payload.categoryId,
-            brandId: payload.brandId,
+            ...(payload.categoryId && { categoryId: payload.categoryId }),
+            ...(payload.brandId && { brandId: payload.brandId }),
             price: payload.price || 100,
             ageRange: payload.ageRange,
             imageUrl: payload.imageUrl,
@@ -303,6 +305,7 @@ toyRoute.openapi(
 
         return c.json(createdToy, 201);
       } catch (error) {
+        console.error(error);
         return c.json(
           {
             message: "Toy with the same slug or sku already exists",

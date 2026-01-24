@@ -1,5 +1,6 @@
 import { categories, brands, toys } from "./data";
 import { prisma } from "../src/lib/prisma";
+import { toyRoute } from "../src/modules/toy/route";
 
 async function main() {
   console.log("🌱 Seeding database...");
@@ -32,16 +33,12 @@ async function main() {
 
   // 3️⃣ Seed Toys
   for (const toy of toys) {
-    const categoryId = categoryMap.get(toy.categorySlug);
+    const categoryId = toy.categorySlug
+      ? categoryMap.get(toy.categorySlug)
+      : null;
     const brandId = toy.brandSlug ? brandMap.get(toy.brandSlug) : null;
 
     try {
-      if (!categoryId) {
-        throw new Error(
-          `Toy "${toy.slug}" failed to seed with category "${toy.categorySlug}" not found`,
-        );
-      }
-
       await prisma.toy.upsert({
         where: { sku: toy.sku },
         update: {

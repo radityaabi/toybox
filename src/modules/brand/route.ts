@@ -219,13 +219,13 @@ brandRoute.openapi(
     try {
       const { id } = c.req.valid("param");
 
-      const brand = await prisma.brand.delete({
+      await prisma.brand.delete({
         where: {
           id: id,
         },
       });
 
-      return c.json(brand, 200);
+      return c.json({ message: "Brand deleted successfully" }, 200);
     } catch (error) {
       return c.json(
         {

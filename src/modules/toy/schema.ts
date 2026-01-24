@@ -5,7 +5,7 @@ import { BrandSchema } from "../brand/schema";
 const ToyBaseSchema = z.object({
   sku: z.string().min(3).max(20).openapi({ example: "SKU123" }),
   name: z.string().min(3).max(100).openapi({ example: "Toy Name" }),
-  categoryId: z.number().openapi({ example: 1 }),
+  categoryId: z.number().nullable().optional().openapi({ example: 1 }),
   brandId: z.number().nullable().optional().openapi({ example: 1 }),
   price: z.number().min(100).default(100).openapi({ example: 100 }),
   ageRange: z
