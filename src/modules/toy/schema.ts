@@ -1,11 +1,12 @@
 import { z } from "@hono/zod-openapi";
 import { CategorySchema } from "../category/schema";
+import { BrandSchema } from "../brand/schema";
 
 const ToyBaseSchema = z.object({
   sku: z.string().min(3).max(20).openapi({ example: "SKU123" }),
   name: z.string().min(3).max(100).openapi({ example: "Toy Name" }),
   categoryId: z.number().openapi({ example: 1 }),
-  brand: z.string().min(2).nullable().optional().openapi({ example: "Brand" }),
+  brandId: z.number().nullable().optional().openapi({ example: 1 }),
   price: z.number().min(100).default(100).openapi({ example: 100 }),
   ageRange: z
     .string()
@@ -29,10 +30,11 @@ const ToyBaseSchema = z.object({
 export const ToyResponseSchema = ToyBaseSchema.extend({
   id: z.number(),
   slug: z.string().max(100),
-  category: CategorySchema.optional(),
+  category: CategorySchema.nullable().optional(),
+  brand: BrandSchema.nullable().optional(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
-}).omit({ categoryId: true });
+}).omit({ categoryId: true, brandId: true });
 
 export const SearchResultSchema = z.array(ToyResponseSchema);
 

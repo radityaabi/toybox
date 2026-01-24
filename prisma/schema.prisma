@@ -27,20 +27,36 @@ model Category {
   @@map("categories")
 }
 
+model Brand {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(30)
+  slug String @unique @db.VarChar(30)
+  logo String? @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+
+  toys Toy[]
+
+  @@map("brands")
+}
+
 model Toy {
   id   Int    @id @default(autoincrement())
   sku  String @unique @db.VarChar(20)
   name String @db.VarChar(100)
   slug String @unique @db.VarChar(100)
 
-  brand       String? @db.VarChar(20)
+  categoryId Int      @map("categoryId")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  brandId    Int?   @map("brandId")
+  brand      Brand? @relation(fields: [brandId], references: [id], onDelete: SetNull)
+
   price       Int
   ageRange    String? @db.VarChar(20)
   imageUrl    String? @db.Text
   description String? @db.Text
-
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId Int      @map("categoryId")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now()) @updatedAt

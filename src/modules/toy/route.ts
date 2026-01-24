@@ -40,7 +40,7 @@ toyRoute.openapi(
         orderBy: {
           id: "asc",
         },
-        include: { category: true },
+        include: { category: true, brand: true },
       });
       return c.json(toys);
     } catch (error) {
@@ -105,7 +105,7 @@ toyRoute.openapi(
         orderBy: {
           id: "asc",
         },
-        include: { category: true },
+        include: { category: true, brand: true },
       });
 
       return c.json(toys, 200);
@@ -150,7 +150,7 @@ toyRoute.openapi(
         where: {
           slug: slug,
         },
-        include: { category: true },
+        include: { category: true, brand: true },
       });
 
       if (!toy) {
@@ -266,6 +266,23 @@ toyRoute.openapi(
         );
       }
 
+      // Check if brand exists
+      if (payload.brandId) {
+        const findBrand = await prisma.brand.findUnique({
+          where: { id: payload.brandId },
+        });
+
+        if (!findBrand) {
+          return c.json(
+            {
+              message: "Brand not found",
+              code: "BRAND_NOT_FOUND" as const,
+            },
+            404,
+          );
+        }
+      }
+
       try {
         const newSlug = createSlug(payload.name);
         //Create new toy data
@@ -275,13 +292,13 @@ toyRoute.openapi(
             name: payload.name,
             slug: newSlug,
             categoryId: payload.categoryId,
-            brand: payload.brand,
+            brandId: payload.brandId,
             price: payload.price || 100,
             ageRange: payload.ageRange,
             imageUrl: payload.imageUrl,
             description: payload.description,
           },
-          include: { category: true },
+          include: { category: true, brand: true },
         });
 
         return c.json(createdToy, 201);
@@ -365,7 +382,7 @@ toyRoute.openapi(
           ...payload,
           slug: payload.name ? createSlug(payload.name) : foundToy.slug,
         },
-        include: { category: true },
+        include: { category: true, brand: true },
       });
 
       return c.json(updatedToy, 200);
@@ -432,12 +449,13 @@ toyRoute.openapi(
               name: payload.name,
               slug: newSlug,
               categoryId: payload.categoryId,
-              brand: payload.brand,
+              brandId: payload.brandId,
               price: payload.price || 100,
               ageRange: payload.ageRange,
               imageUrl: payload.imageUrl,
               description: payload.description,
             },
+            include: { category: true, brand: true },
           });
           return c.json(createdToy, 201);
         } catch (error) {
@@ -454,7 +472,7 @@ toyRoute.openapi(
       const updatedToy = await prisma.toy.update({
         where: { id: id },
         data: payload,
-        include: { category: true },
+        include: { category: true, brand: true },
       });
 
       return c.json(updatedToy, 200);
