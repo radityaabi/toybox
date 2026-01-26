@@ -1,7 +1,11 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "../../lib/prisma";
 import { CategorySchema, CreateCategorySchema } from "./schema";
-import { getErrorSchema, GetParamsSchema } from "../common/schema";
+import {
+  getErrorSchema,
+  GetParamsSchema,
+  ParamIdSchema,
+} from "../common/schema";
 import { createSlug } from "../common/utils";
 import { errorMessage } from "../../utils/error";
 import { ToyResponseSchema } from "../toy/schema";
@@ -158,6 +162,51 @@ categoryRoute.openapi(
         {
           message: "Error creating category",
           code: "CATEGORY_ADD_ERROR" as const,
+          error: errorMessage(error),
+        },
+        500,
+      );
+    }
+  },
+);
+
+//DELETE - Delete a category by id
+categoryRoute.openapi(
+  {
+    method: "delete",
+    path: "/{id}",
+    request: {
+      params: ParamIdSchema,
+    },
+    tags: tag,
+    description: "Delete a category",
+    responses: {
+      200: {
+        description: "Successfully deleted the category",
+        content: { "application/json": { schema: CategorySchema } },
+      },
+      500: {
+        content: { "application/json": { schema: getErrorSchema } },
+        description: "Returns an error",
+      },
+    },
+  },
+  async (c) => {
+    try {
+      const { id } = c.req.valid("param");
+
+      const category = await prisma.category.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      return c.json(category, 200);
+    } catch (error) {
+      return c.json(
+        {
+          message: "Error deleting category",
+          code: "CATEGORY_DELETE_ERROR" as const,
           error: errorMessage(error),
         },
         500,
