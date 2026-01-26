@@ -16,8 +16,8 @@ datasource db {
 
 model Category {
   id   Int    @id @default(autoincrement())
-  name String @db.VarChar(100)
-  slug String @unique @db.VarChar(100)
+  name String @db.VarChar(50)
+  slug String @unique @db.VarChar(50)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now()) @updatedAt

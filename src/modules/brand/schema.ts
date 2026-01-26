@@ -3,8 +3,8 @@ import { SlugSchema } from "../common/schema";
 
 export const BrandSchema = z.object({
   id: z.number().openapi({ example: 1 }).optional(),
-  name: z.string().min(3).openapi({ example: "Bandai Namco" }),
-  slug: SlugSchema.openapi({ example: "bandai-namco" }).optional(),
+  name: z.string().min(3).max(30).openapi({ example: "Bandai Namco" }),
+  slug: SlugSchema.max(30).openapi({ example: "bandai-namco" }).optional(),
   logo: z
     .url()
     .nullable()
