@@ -127,8 +127,8 @@ categoryRoute.openapi(
         content: { "application/json": { schema: getErrorSchema } },
       },
       500: {
-        content: { "application/json": { schema: getErrorSchema } },
         description: "Returns an error",
+        content: { "application/json": { schema: getErrorSchema } },
       },
     },
   },
@@ -186,8 +186,8 @@ categoryRoute.openapi(
         content: { "application/json": { schema: CategorySchema } },
       },
       500: {
-        content: { "application/json": { schema: getErrorSchema } },
         description: "Returns an error",
+        content: { "application/json": { schema: getErrorSchema } },
       },
     },
   },

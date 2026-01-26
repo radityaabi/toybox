@@ -137,8 +137,13 @@ toyRoute.openapi(
         description: "Successfully retrieved the toy",
         content: { "application/json": { schema: ToyResponseSchema } },
       },
+      404: {
+        description: "Toy not found",
+        content: { "application/json": { schema: getErrorSchema } },
+      },
       500: {
         description: "Error retrieving toy by slug",
+        content: { "application/json": { schema: getErrorSchema } },
       },
     },
   },
@@ -154,12 +159,22 @@ toyRoute.openapi(
       });
 
       if (!toy) {
-        return c.json({ message: "Toy not found", code: "TOY_NOT_FOUND" }, 404);
+        return c.json(
+          { message: "Toy not found", code: "TOY_NOT_FOUND" as const },
+          404,
+        );
       }
 
-      return c.json(toy);
+      return c.json(toy, 200);
     } catch (error) {
-      return c.json({ message: "Error retrieving toy by slug" }, 500);
+      return c.json(
+        {
+          message: "Error retrieving toy by slug",
+          code: "RETRIEVE_ERROR" as const,
+          error: errorMessage(error),
+        },
+        500,
+      );
     }
   },
 );

@@ -83,7 +83,7 @@ brandRoute.openapi(
       const { slug } = c.req.valid("param");
 
       // Check if brand exists
-      const brand = await prisma.brand.findFirst({
+      const brand = await prisma.brand.findUnique({
         where: {
           slug: slug,
         },
@@ -148,8 +148,8 @@ brandRoute.openapi(
         content: { "application/json": { schema: getErrorSchema } },
       },
       500: {
-        content: { "application/json": { schema: getErrorSchema } },
         description: "Returns an error",
+        content: { "application/json": { schema: getErrorSchema } },
       },
     },
   },
@@ -210,8 +210,8 @@ brandRoute.openapi(
         content: { "application/json": { schema: getErrorSchema } },
       },
       500: {
-        content: { "application/json": { schema: getErrorSchema } },
         description: "Returns an error",
+        content: { "application/json": { schema: getErrorSchema } },
       },
     },
   },

@@ -23,6 +23,7 @@ export const getErrorSchema = z.object({
       "SEARCH_NOT_FOUND",
       "DELETE_ERROR",
       "ADD_ERROR",
+      "RETRIEVE_ERROR",
       "UPDATE_ERROR",
       "TOY_NOT_FOUND",
       "TOY_EXISTS",
