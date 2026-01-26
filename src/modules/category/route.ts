@@ -183,7 +183,6 @@ categoryRoute.openapi(
     responses: {
       200: {
         description: "Successfully deleted the category",
-        content: { "application/json": { schema: CategorySchema } },
       },
       500: {
         description: "Returns an error",
@@ -201,7 +200,7 @@ categoryRoute.openapi(
         },
       });
 
-      return c.json(category, 200);
+      return c.json({ message: "Category deleted successfully" }, 200);
     } catch (error) {
       return c.json(
         {
