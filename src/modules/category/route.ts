@@ -2,7 +2,7 @@ import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "../../lib/prisma";
 import { CategorySchema, CreateCategorySchema } from "./schema";
 import {
-  getErrorSchema,
+  GenericErrorSchema,
   GetParamsSchema,
   ParamIdSchema,
 } from "../common/schema";
@@ -27,7 +27,7 @@ categoryRoute.openapi(
       },
       500: {
         description: "Error retrieving categories",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -47,10 +47,10 @@ categoryRoute.openapi(
           code: "GET_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // GET - Retrieve a toy by slug
@@ -70,7 +70,7 @@ categoryRoute.openapi(
       },
       500: {
         description: "Error retrieving category",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -99,10 +99,10 @@ categoryRoute.openapi(
           code: "GET_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // POST - Create a new category
@@ -124,11 +124,11 @@ categoryRoute.openapi(
       },
       400: {
         description: "Bad request",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -153,7 +153,7 @@ categoryRoute.openapi(
             message: "Category already exists",
             code: "CATEGORY_EXISTS" as const,
           },
-          400,
+          400
         );
       }
     } catch (error) {
@@ -164,10 +164,10 @@ categoryRoute.openapi(
           code: "CATEGORY_ADD_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 //DELETE - Delete a category by id
@@ -186,7 +186,7 @@ categoryRoute.openapi(
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -208,8 +208,8 @@ categoryRoute.openapi(
           code: "CATEGORY_DELETE_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );

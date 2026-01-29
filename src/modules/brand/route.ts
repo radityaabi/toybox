@@ -2,7 +2,7 @@ import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "../../lib/prisma";
 import { BrandSchema, CreateBrandSchema } from "./schema";
 import {
-  getErrorSchema,
+  GenericErrorSchema,
   GetParamsSchema,
   ParamIdSchema,
 } from "../common/schema";
@@ -27,7 +27,7 @@ brandRoute.openapi(
       },
       500: {
         description: "Error retrieving brands",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -47,10 +47,10 @@ brandRoute.openapi(
           code: "GET_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // GET - Retrieve toys by brand (slug)
@@ -70,11 +70,11 @@ brandRoute.openapi(
       },
       404: {
         description: "Brand not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error retrieving brand",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -95,7 +95,7 @@ brandRoute.openapi(
             message: "Brand not found",
             code: "BRAND_NOT_FOUND" as const,
           },
-          404,
+          404
         );
       }
 
@@ -120,10 +120,10 @@ brandRoute.openapi(
           code: "GET_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // POST - Create a new brand
@@ -145,11 +145,11 @@ brandRoute.openapi(
       },
       400: {
         description: "Bad request",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -174,7 +174,7 @@ brandRoute.openapi(
             message: "Brand already exists",
             code: "BRAND_EXISTS" as const,
           },
-          400,
+          400
         );
       }
     } catch (error) {
@@ -185,10 +185,10 @@ brandRoute.openapi(
           code: "BRAND_ADD_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // DELETE - Delete a brand
@@ -207,11 +207,11 @@ brandRoute.openapi(
       },
       404: {
         description: "Brand not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -225,7 +225,7 @@ brandRoute.openapi(
         },
       });
 
-      return c.json({ message: "Brand deleted successfully", id : id }, 200);
+      return c.json({ message: "Brand deleted successfully", id: id }, 200);
     } catch (error) {
       return c.json(
         {
@@ -233,8 +233,8 @@ brandRoute.openapi(
           code: "BRAND_DELETE_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
