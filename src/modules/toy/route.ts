@@ -219,7 +219,7 @@ toyRoute.openapi(
         where: { id },
       });
 
-      return c.json({ message: "Toy deleted successfully" });
+      return c.json({ message: "Toy deleted successfully", id: id });
     } catch (error) {
       return c.json(
         {

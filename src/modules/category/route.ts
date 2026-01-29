@@ -200,7 +200,7 @@ categoryRoute.openapi(
         },
       });
 
-      return c.json({ message: "Category deleted successfully" }, 200);
+      return c.json({ message: "Category deleted successfully", id: id }, 200);
     } catch (error) {
       return c.json(
         {

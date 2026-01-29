@@ -225,7 +225,7 @@ brandRoute.openapi(
         },
       });
 
-      return c.json({ message: "Brand deleted successfully" }, 200);
+      return c.json({ message: "Brand deleted successfully", id : id }, 200);
     } catch (error) {
       return c.json(
         {
