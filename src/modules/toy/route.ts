@@ -61,7 +61,7 @@ toyRoute.openapi(
   {
     method: "get",
     path: "/search",
-    description: "Search toys by name",
+    description: "Search toys by name or sku or slug",
     tags: tag,
     request: {
       query: SearchQuerySchema,
@@ -97,22 +97,28 @@ toyRoute.openapi(
 
       const toys = await prisma.toy.findMany({
         where: {
-          name: {
-            contains: q,
-            mode: "insensitive",
-          },
-          sku: {
-            contains: q,
-            mode: "insensitive",
-          },
-          slug: {
-            contains: q,
-            mode: "insensitive",
-          },
+          OR: [
+            {
+              name: {
+                contains: q,
+                mode: "insensitive",
+              },
+            },
+            {
+              sku: {
+                contains: q,
+                mode: "insensitive",
+              },
+            },
+            {
+              slug: {
+                contains: q,
+                mode: "insensitive",
+              },
+            },
+          ],
         },
-        orderBy: {
-          id: "asc",
-        },
+        orderBy: { id: "asc" },
         include: { category: true, brand: true },
       });
 
@@ -272,37 +278,34 @@ toyRoute.openapi(
       const payload = c.req.valid("json");
 
       // Check if category exists
-      if (payload.categoryId) {
-        const findCategory = await prisma.category.findUnique({
-          where: { id: payload.categoryId },
-        });
+      const [category, brand] = await prisma.$transaction([
+        payload.categoryId
+          ? prisma.category.findUnique({
+              where: { id: payload.categoryId },
+              select: { id: true },
+            })
+          : Promise.resolve(null),
 
-        if (!findCategory) {
-          return c.json(
-            {
-              message: "Category not found",
-              code: "CATEGORY_NOT_FOUND" as const,
-            },
-            404
-          );
-        }
+        payload.brandId
+          ? prisma.brand.findUnique({
+              where: { id: payload.brandId },
+              select: { id: true },
+            })
+          : Promise.resolve(null),
+      ]);
+
+      if (payload.categoryId && !category) {
+        return c.json(
+          { message: "Category not found", code: "CATEGORY_NOT_FOUND" as const },
+          404
+        );
       }
 
-      // Check if brand exists
-      if (payload.brandId) {
-        const findBrand = await prisma.brand.findUnique({
-          where: { id: payload.brandId },
-        });
-
-        if (!findBrand) {
-          return c.json(
-            {
-              message: "Brand not found",
-              code: "BRAND_NOT_FOUND" as const,
-            },
-            404
-          );
-        }
+      if (payload.brandId && !brand) {
+        return c.json(
+          { message: "Brand not found", code: "BRAND_NOT_FOUND" as const },
+          404
+        );
       }
 
       try {
