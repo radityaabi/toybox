@@ -458,7 +458,7 @@ toyRoute.openapi(
               slug: newSlug,
               categoryId: payload.categoryId,
               brandId: payload.brandId,
-              price: payload.price || 100,
+              price: payload.price,
               ageRange: payload.ageRange,
               imageUrl: payload.imageUrl,
               description: payload.description,
