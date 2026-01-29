@@ -194,7 +194,7 @@ categoryRoute.openapi(
     try {
       const { id } = c.req.valid("param");
 
-      const category = await prisma.category.delete({
+      await prisma.category.delete({
         where: {
           id: id,
         },
