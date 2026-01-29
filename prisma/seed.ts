@@ -1,6 +1,5 @@
 import { categories, brands, toys } from "./data";
 import { prisma } from "../src/lib/prisma";
-import { toyRoute } from "../src/modules/toy/route";
 
 async function main() {
   console.log("🌱 Seeding database...");
