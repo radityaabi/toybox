@@ -253,7 +253,7 @@ toyRoute.openapi(
         content: { "application/json": { schema: getErrorSchema } },
       },
       404: {
-        description: "Category not found",
+        description: "Category or Brand not found",
         content: { "application/json": { schema: getErrorSchema } },
       },
       500: {
@@ -332,7 +332,7 @@ toyRoute.openapi(
     } catch (error) {
       return c.json(
         {
-          message: "Error adding toys",
+          message: "Error adding toy",
           code: "ADD_ERROR" as const,
           error: errorMessage(error),
         },
