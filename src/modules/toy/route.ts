@@ -9,7 +9,7 @@ import {
   UpdateToySchema,
 } from "./schema";
 import {
-  getErrorSchema,
+  GenericErrorSchema,
   GetParamsSchema,
   SearchQuerySchema,
   ParamIdSchema,
@@ -30,7 +30,7 @@ toyRoute.openapi(
       200: { description: "Successfully retrieved list of toys" },
       500: {
         description: "Error retrieving toys",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -50,10 +50,10 @@ toyRoute.openapi(
           code: "GET_ERROR",
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // GET - Search toys by name query
@@ -73,11 +73,11 @@ toyRoute.openapi(
       },
       400: {
         description: "Invalid query parameter",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error searching toys",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -85,19 +85,27 @@ toyRoute.openapi(
     try {
       const { q } = c.req.valid("query");
 
-      if (!q || q.trim() === "") {
+      if (q.trim() === "") {
         return c.json(
           {
             message: "Invalid query parameter",
             code: "INVALID_QUERY" as const,
           },
-          400,
+          400
         );
       }
 
       const toys = await prisma.toy.findMany({
         where: {
           name: {
+            contains: q,
+            mode: "insensitive",
+          },
+          sku: {
+            contains: q,
+            mode: "insensitive",
+          },
+          slug: {
             contains: q,
             mode: "insensitive",
           },
@@ -116,10 +124,10 @@ toyRoute.openapi(
           code: "SEARCH_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // GET - Retrieve a toy by slug
@@ -139,11 +147,11 @@ toyRoute.openapi(
       },
       404: {
         description: "Toy not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error retrieving toy by slug",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -161,7 +169,7 @@ toyRoute.openapi(
       if (!toy) {
         return c.json(
           { message: "Toy not found", code: "TOY_NOT_FOUND" as const },
-          404,
+          404
         );
       }
 
@@ -173,10 +181,10 @@ toyRoute.openapi(
           code: "RETRIEVE_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // DELETE - Delete a toy by ID
@@ -195,42 +203,39 @@ toyRoute.openapi(
       },
       404: {
         description: "Toy not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error deleting toy",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
   async (c) => {
+    const { id } = c.req.valid("param");
+
     try {
-      const { id } = c.req.valid("param");
-
-      const result = await prisma.toy.findUnique({
+      const result = await prisma.toy.delete({
         where: { id },
       });
 
-      if (!result) {
-        return c.json({ message: "Toy not found", code: "TOY_NOT_FOUND" }, 404);
-      }
-
-      await prisma.toy.delete({
-        where: { id },
+      return c.json({
+        message: "Toy deleted successfully",
+        result,
+        id: id,
       });
-
-      return c.json({ message: "Toy deleted successfully", id: id });
     } catch (error) {
       return c.json(
         {
           message: "Error deleting toy",
           code: "DELETE_ERROR" as const,
           error: errorMessage(error),
+          id,
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // POST - Create a new toy
@@ -250,14 +255,14 @@ toyRoute.openapi(
       },
       400: {
         description: "Bad Request",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       404: {
         description: "Category or Brand not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
         description: "Returns an error",
       },
     },
@@ -278,7 +283,7 @@ toyRoute.openapi(
               message: "Category not found",
               code: "CATEGORY_NOT_FOUND" as const,
             },
-            404,
+            404
           );
         }
       }
@@ -295,7 +300,7 @@ toyRoute.openapi(
               message: "Brand not found",
               code: "BRAND_NOT_FOUND" as const,
             },
-            404,
+            404
           );
         }
       }
@@ -305,15 +310,8 @@ toyRoute.openapi(
         //Create new toy data
         const createdToy = await prisma.toy.create({
           data: {
-            sku: payload.sku,
-            name: payload.name,
+            ...payload,
             slug: newSlug,
-            ...(payload.categoryId && { categoryId: payload.categoryId }),
-            ...(payload.brandId && { brandId: payload.brandId }),
-            price: payload.price || 100,
-            ageRange: payload.ageRange,
-            imageUrl: payload.imageUrl,
-            description: payload.description,
           },
           include: { category: true, brand: true },
         });
@@ -326,7 +324,7 @@ toyRoute.openapi(
             message: "Toy with the same slug or sku already exists",
             code: "TOY_EXISTS" as const,
           },
-          400,
+          400
         );
       }
     } catch (error) {
@@ -336,10 +334,10 @@ toyRoute.openapi(
           code: "ADD_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // PATCH - Update a toy by ID
@@ -362,19 +360,11 @@ toyRoute.openapi(
       },
       404: {
         description: "Toy not found",
-        content: {
-          "application/json": {
-            schema: getErrorSchema,
-          },
-        },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error updating toy",
-        content: {
-          "application/json": {
-            schema: getErrorSchema,
-          },
-        },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -390,7 +380,7 @@ toyRoute.openapi(
       if (!foundToy) {
         return c.json(
           { message: "Toy not found", code: "TOY_NOT_FOUND" as const },
-          404,
+          404
         );
       }
 
@@ -411,10 +401,10 @@ toyRoute.openapi(
           code: "UPDATE_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );
 
 // PUT - Replace a toy by ID
@@ -441,11 +431,11 @@ toyRoute.openapi(
       },
       400: {
         description: "Toy with the same slug or sku already exists",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error replacing toy",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -481,8 +471,9 @@ toyRoute.openapi(
             {
               message: "Toy with the same slug or sku already exists",
               code: "TOY_EXISTS" as const,
+              error: errorMessage(error),
             },
-            400,
+            400
           );
         }
       }
@@ -501,8 +492,8 @@ toyRoute.openapi(
           code: "REPLACE_ERROR" as const,
           error: errorMessage(error),
         },
-        500,
+        500
       );
     }
-  },
+  }
 );

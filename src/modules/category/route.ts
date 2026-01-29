@@ -2,7 +2,7 @@ import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "../../lib/prisma";
 import { CategorySchema, CreateCategorySchema } from "./schema";
 import {
-  getErrorSchema,
+  GenericErrorSchema,
   GetParamsSchema,
   ParamIdSchema,
 } from "../common/schema";
@@ -27,7 +27,7 @@ categoryRoute.openapi(
       },
       500: {
         description: "Error retrieving categories",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -70,7 +70,7 @@ categoryRoute.openapi(
       },
       500: {
         description: "Error retrieving category",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -124,11 +124,11 @@ categoryRoute.openapi(
       },
       400: {
         description: "Bad request",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -186,7 +186,7 @@ categoryRoute.openapi(
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },

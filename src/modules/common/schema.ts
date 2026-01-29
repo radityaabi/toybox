@@ -14,7 +14,7 @@ export const SearchQuerySchema = z.object({
   q: z.string().min(1),
 });
 
-export const getErrorSchema = z.object({
+export const GenericErrorSchema = z.object({
   message: z.string().openapi({ example: "Not Found" }),
   code: z
     .enum([

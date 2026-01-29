@@ -2,7 +2,7 @@ import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "../../lib/prisma";
 import { BrandSchema, CreateBrandSchema } from "./schema";
 import {
-  getErrorSchema,
+  GenericErrorSchema,
   GetParamsSchema,
   ParamIdSchema,
 } from "../common/schema";
@@ -27,7 +27,7 @@ brandRoute.openapi(
       },
       500: {
         description: "Error retrieving brands",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -70,11 +70,11 @@ brandRoute.openapi(
       },
       404: {
         description: "Brand not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Error retrieving brand",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -145,11 +145,11 @@ brandRoute.openapi(
       },
       400: {
         description: "Bad request",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },
@@ -207,11 +207,11 @@ brandRoute.openapi(
       },
       404: {
         description: "Brand not found",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
       500: {
         description: "Returns an error",
-        content: { "application/json": { schema: getErrorSchema } },
+        content: { "application/json": { schema: GenericErrorSchema } },
       },
     },
   },

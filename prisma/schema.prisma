@@ -28,9 +28,9 @@ model Category {
 }
 
 model Brand {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(30)
-  slug String @unique @db.VarChar(30)
+  id   Int     @id @default(autoincrement())
+  name String  @db.VarChar(30)
+  slug String  @unique @db.VarChar(30)
   logo String? @db.Text
 
   createdAt DateTime  @default(now())
@@ -50,10 +50,10 @@ model Toy {
   categoryId Int?      @map("categoryId")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
-  brandId    Int?   @map("brandId")
-  brand      Brand? @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  brandId Int?   @map("brandId")
+  brand   Brand? @relation(fields: [brandId], references: [id], onDelete: SetNull)
 
-  price       Int
+  price       Int     @default(100)
   ageRange    String? @db.VarChar(20)
   imageUrl    String? @db.Text
   description String? @db.Text
