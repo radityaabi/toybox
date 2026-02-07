@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "toys" ALTER COLUMN "price" SET DEFAULT 100;

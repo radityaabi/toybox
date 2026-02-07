@@ -50,10 +50,10 @@ toyRoute.openapi(
           code: "GET_ERROR",
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // GET - Search toys by name query
@@ -91,7 +91,7 @@ toyRoute.openapi(
             message: "Invalid query parameter",
             code: "INVALID_QUERY" as const,
           },
-          400
+          400,
         );
       }
 
@@ -130,10 +130,10 @@ toyRoute.openapi(
           code: "SEARCH_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // GET - Retrieve a toy by slug
@@ -175,7 +175,7 @@ toyRoute.openapi(
       if (!toy) {
         return c.json(
           { message: "Toy not found", code: "TOY_NOT_FOUND" as const },
-          404
+          404,
         );
       }
 
@@ -187,10 +187,10 @@ toyRoute.openapi(
           code: "RETRIEVE_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // DELETE - Delete a toy by ID
@@ -238,10 +238,10 @@ toyRoute.openapi(
           error: errorMessage(error),
           id,
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // POST - Create a new toy
@@ -277,34 +277,39 @@ toyRoute.openapi(
     try {
       const payload = c.req.valid("json");
 
-      // Check if category exists
-      const [category, brand] = await prisma.$transaction([
-        payload.categoryId
-          ? prisma.category.findUnique({
-              where: { id: payload.categoryId },
-              select: { id: true },
-            })
-          : Promise.resolve(null),
+      // Check if category or brand exists
+      const [category, brand] = await prisma.$transaction(async (tx) => {
+        return [
+          payload.categoryId
+            ? await tx.category.findUnique({
+                where: { id: payload.categoryId },
+                select: { id: true },
+              })
+            : null,
 
-        payload.brandId
-          ? prisma.brand.findUnique({
-              where: { id: payload.brandId },
-              select: { id: true },
-            })
-          : Promise.resolve(null),
-      ]);
+          payload.brandId
+            ? await tx.brand.findUnique({
+                where: { id: payload.brandId },
+                select: { id: true },
+              })
+            : null,
+        ];
+      });
 
       if (payload.categoryId && !category) {
         return c.json(
-          { message: "Category not found", code: "CATEGORY_NOT_FOUND" as const },
-          404
+          {
+            message: "Category not found",
+            code: "CATEGORY_NOT_FOUND" as const,
+          },
+          404,
         );
       }
 
       if (payload.brandId && !brand) {
         return c.json(
           { message: "Brand not found", code: "BRAND_NOT_FOUND" as const },
-          404
+          404,
         );
       }
 
@@ -327,7 +332,7 @@ toyRoute.openapi(
             message: "Toy with the same slug or sku already exists",
             code: "TOY_EXISTS" as const,
           },
-          400
+          400,
         );
       }
     } catch (error) {
@@ -337,10 +342,10 @@ toyRoute.openapi(
           code: "ADD_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // PATCH - Update a toy by ID
@@ -383,7 +388,7 @@ toyRoute.openapi(
       if (!foundToy) {
         return c.json(
           { message: "Toy not found", code: "TOY_NOT_FOUND" as const },
-          404
+          404,
         );
       }
 
@@ -404,10 +409,10 @@ toyRoute.openapi(
           code: "UPDATE_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
 
 // PUT - Replace a toy by ID
@@ -476,7 +481,7 @@ toyRoute.openapi(
               code: "TOY_EXISTS" as const,
               error: errorMessage(error),
             },
-            400
+            400,
           );
         }
       }
@@ -495,8 +500,8 @@ toyRoute.openapi(
           code: "REPLACE_ERROR" as const,
           error: errorMessage(error),
         },
-        500
+        500,
       );
     }
-  }
+  },
 );
